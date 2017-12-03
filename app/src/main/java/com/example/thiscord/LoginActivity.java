@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private int port =30000;
     private Thread thread;
 
-
+//첫번째 테스트
     @Override
     protected void onStart() {
         super.onStart();
