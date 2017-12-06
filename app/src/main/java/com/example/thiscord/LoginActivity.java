@@ -28,14 +28,14 @@ public class LoginActivity extends AppCompatActivity {
     public static DataOutputStream dos;
     public static OutputStream os;
 
-
+    private Button SetButton;
     private EditText IDText;
     private EditText PWDText;
     private Button LoginButton;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private String ip ="223.194.157.24";
+    private String ip ="223.194.159.58";
     //private String ip = "10.0.2.2";   // 안드로이드 에뮬레이터에서는 localhost가 아니라 10.0.2.2로 접근!!
 
     private int port =30000;
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         IDText = (EditText)findViewById(R.id.username);
         PWDText = (EditText)findViewById(R.id.password);
         LoginButton = (Button)findViewById(R.id.loginbutton);
-
+        SetButton = (Button)findViewById(R.id.settingButton);
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +68,12 @@ public class LoginActivity extends AppCompatActivity {
                 editor.commit();
                 login_pwd = PWDText.getText().toString();
                 connectServer();
+            }
+        });
+        SetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
@@ -88,11 +94,12 @@ public class LoginActivity extends AppCompatActivity {
                     System.out.println("트라이는 들어옴");
                     Send_Msg(login_id+" "+login_pwd); // 아이디랑를 보낸다
 
-                    byte[] b = new byte[1024];
+                  /*  byte[] b = new byte[1024];
                     dis.read(b);
 
                     String msg = new String(b, "euc-kr");
-
+*/
+                    String msg = dis.readUTF();
                     System.out.println(msg);
                     String[] gmsg = msg.split(" ");
 
@@ -108,11 +115,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Send_Msg(String msg){
-        byte[] bb;
-        bb = msg.getBytes();
+      //  byte[] bb;
+      //  bb = msg.getBytes();
         Log.e("send","send success");
         try{
-         dos.write(bb);
+            //  dos.write(bb);
+            dos.writeUTF(msg);
         }catch(Exception e){
             e.printStackTrace();
         }
