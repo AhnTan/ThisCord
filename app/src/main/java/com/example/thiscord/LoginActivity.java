@@ -99,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     String msg = new String(b, "euc-kr");
 */
+                  //
                     String msg = dis.readUTF();
                     System.out.println(msg);
                     String[] gmsg = msg.split(" ");
