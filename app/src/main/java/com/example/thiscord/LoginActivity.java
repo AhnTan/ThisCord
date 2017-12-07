@@ -145,40 +145,4 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-   /* class Recv_Msg implements Runnable{
-        @Override
-        public void run() {
-            Boolean flag=true;
-            while(flag) {
-                try{
-                    byte[] b = new byte[1024];
-                    dis.read(b);
-                    String msg = new String(b, "euc-kr");
-                  //  String msg = new String(b,0,b.length);
-                    String[] gmsg;
-                    gmsg = msg.split(" ");
-                    System.out.println(gmsg);
-                    recv_msg = gmsg[0];
-                   // recv_msg = msg;
-
-                    //mHandler.sendEmptyMessage(0);
-                }
-                catch(IOException e) {
-                    //e.printStackTrace();
-                    //status = false;
-                    try {
-                        os.close();
-                        is.close();
-                        dos.close();
-                        dis.close();
-                        socket.close();
-                        break;
-                    } catch (IOException e1) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }*/
 }

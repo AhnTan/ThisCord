@@ -105,7 +105,7 @@ public class Main_JoinState_Fragment extends Fragment {
             }
         });
 
-        connectServer();
+        //connectServer();
         addUser();
 
 
@@ -178,7 +178,13 @@ public class Main_JoinState_Fragment extends Fragment {
 
     public void removed(){
         main_joinstateAdapter.removeItem();
-        main_joinstateAdapter.notifyDataSetChanged();
+        //main_joinstateAdapter.notifyDataSetChanged();
+        try{
+            Thread.sleep(100);
+        }
+        catch (Exception e) {
+
+        }
         addUser();
     }
 
@@ -196,7 +202,7 @@ public class Main_JoinState_Fragment extends Fragment {
         for(int i=0; i<user_arrayList.size(); i++){
             if(!user_arrayList.get(i).getId().equals(login_user)){
                 main_joinstateAdapter.addItem(new Contacts(user_arrayList.get(i).getUrl(), user_arrayList.get(i).getBackurl(), user_arrayList.get(i).getId(), user_arrayList.get(i).getName(), user_arrayList.get(i).getStats()));
-                main_joinstateAdapter.notifyDataSetChanged();
+                //main_joinstateAdapter.notifyDataSetChanged();
             }
         }
 

@@ -112,7 +112,7 @@ public class Create_Room_Activity extends Activity {
             resultIntent.putExtra("Result", gmsg[1]);
             setResult(RESULT_OK, resultIntent);
             finish();
-
+            System.out.println("넌 찍히면 안돼");
         }
         else if(str.equals("#NOK")){ // pwd error
             System.out.println("password error!");
