@@ -69,7 +69,7 @@
             app:srcCompat="@drawable/avatar" />
 
         <EditText
-            android:text="shbaek"
+            android:text="ahntan"
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

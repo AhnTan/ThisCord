@@ -1,6 +1,8 @@
 package com.example.thiscord;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,13 +21,16 @@ public class Main_roomlist_Fragment extends Fragment {
     private static final int request_code = 0;
     private Main_roomlistAdapter main_roomlistAdapter;
 
+    private String room_id; // 방이름
+    private String login_user; // 접속한 유저 아이디
+    private String[] gmsg; // 받은 데이터 split으로 잘라서 넣어두는곳
+    SharedPreferences sharedPreferences;
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle){
         View view = inflater.inflate(R.layout.fragment_main_roomlist_, container, false);
         room_recyclerView = (RecyclerView)view.findViewById(R.id.room_recycleview);
-
-
         return view;
-
     }
 
 
@@ -37,10 +42,10 @@ public class Main_roomlist_Fragment extends Fragment {
         main_roomlistAdapter = new Main_roomlistAdapter(getActivity().getApplicationContext());
         room_recyclerView.setAdapter(main_roomlistAdapter);
 
-       /* main_roomlistAdapter.addItem(new Contacts(R.drawable.user, R.drawable.background1, "안형우", "온라인")); // 이미지 url, 이름 name
-        main_roomlistAdapter.addItem(new Contacts(R.drawable.user2, R.drawable.background2, "백승환", "오프라인")); // 이미지 url, 이름 name
-        main_roomlistAdapter.addItem(new Contacts(R.drawable.user3, R.drawable.background3, "차연경", "자리비움")); // 이미지 url, 이름 name
-*/
+        sharedPreferences = this.getActivity().getSharedPreferences("user_id", Context.MODE_PRIVATE);
+        login_user = sharedPreferences.getString("userid", "01012345678");
+
+
         floatingActionButton = (FloatingActionButton)getActivity().findViewById(R.id.room_add_fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             // 방 추가하는 버튼
@@ -52,18 +57,27 @@ public class Main_roomlist_Fragment extends Fragment {
 
             }
         });
+
+        //connectServer();
     }
 
+
+    // 다른 액티비티에서 넘어온 값을 처리해줌(-> 방생성하기 액티비티)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String room_id = "";
+        room_id = "";
         room_id += data.getStringExtra("Result");
         // 플로팅 버튼에서 취소버튼이 아닌 확인 버튼을 누르게 되면 방목록을 추가함
         if(!room_id.equals("cancle")){
-            main_roomlistAdapter.addItem(new RoomContacts("1", room_id)); // 이미지 url, 이름 name
+          main_roomlistAdapter.addItem(new RoomContacts("1",room_id));
         }
     }
+
+
+
+
+
 
 }
 

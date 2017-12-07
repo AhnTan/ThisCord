@@ -93,4 +93,13 @@ public class Main_roomlistAdapter extends RecyclerView.Adapter<Main_roomlistAdap
 
 
     }
+
+
+    public void removeItem(){
+        int size = arrayList.size();
+        for(int i=0; i<size; i++) {
+            arrayList.remove(0);
+            notifyItemRemoved(0);
+        }
+    }
 }

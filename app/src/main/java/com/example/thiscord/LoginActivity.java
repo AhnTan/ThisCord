@@ -64,8 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"login processing",Toast.LENGTH_LONG).show();
                 login_id = IDText.getText().toString();
                 // SharedPreference를 통해 아이디를 저장(다른 곳에서도 쓰기 위하여)
-                editor.putString("userid", login_id);
-                editor.commit();
+
                 login_pwd = PWDText.getText().toString();
                 connectServer();
             }
@@ -130,15 +129,20 @@ public class LoginActivity extends AppCompatActivity {
 
     private void control_Msg(String str){ //
         if(str.equals("#OK")){  // login success
-            System.out.println("login!!!");
+            System.out.println("LoginActivity login!!!");
+            editor.putString("userid", login_id);
+            System.out.println("로그인 유저1 : "+ login_id);
+            editor.commit();
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
         else if(str.equals("#NOK")){ // pwd error
             System.out.println("password error!");
         }
-        else
-            System.out.println("id/pw error!");
+        else if(str.equals("#USED")) {
+            // 핸들러로 온크리트로 보내서 거기서 toast 띄워야함
+            Toast.makeText(getApplicationContext(), "이미 로그인 되있는 사용자 입니다.", Toast.LENGTH_LONG).show();
+        }
     }
 
 

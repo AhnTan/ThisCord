@@ -121,4 +121,12 @@ public class Main_JoinStateAdapter extends RecyclerView.Adapter<Main_JoinStateAd
 
     }
 
+    public void removeItem(){
+        int size = arrayList.size();
+        for(int i=0; i<size; i++) {
+            arrayList.remove(0);
+            notifyItemRemoved(0);
+        }
+    }
+
 }
