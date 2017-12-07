@@ -80,7 +80,7 @@ public class Create_Room_Activity extends Activity {
                     System.out.println("넘어온값 전");
                     System.out.println("넘어온값 : " + msg);
 
-                    String[] gmsg = msg.split(" ");
+                    gmsg = msg.split(" ");
 
                     control_Msg(gmsg[0]);
 
@@ -106,13 +106,14 @@ public class Create_Room_Activity extends Activity {
 
     }
 
-    private void control_Msg(String str){ //
+    public void control_Msg(String str){ //
         if(str.equals("#create")){  // login success
             System.out.println("CREATEActivity login!!!");
+
             resultIntent.putExtra("Result", gmsg[1]);
             setResult(RESULT_OK, resultIntent);
             finish();
-            System.out.println("넌 찍히면 안돼");
+
         }
         else if(str.equals("#NOK")){ // pwd error
             System.out.println("password error!");
