@@ -9,14 +9,20 @@
     android:background="#4f4e4e"
     android:weightSum="1">
 
-    <Button
-
-        android:id="@+id/settingButton"
-        android:layout_width="26dp"
-        android:layout_height="30dp"
-        android:layout_gravity="right"
-        android:background="@drawable/setting"
-        />
+    <EditText
+        android:id="@+id/ipAddress"
+        android:text="223.194.153.57"
+        android:textAlignment="textEnd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:drawablePadding="5dp"
+        android:ems="5"
+        android:hint="IP Address"
+        android:inputType="text"
+        android:paddingLeft="0dp"
+        android:textColor="#ffffff"
+        android:textColorHint="#999" />
     <LinearLayout
         android:paddingTop="20dp"
         android:layout_width="match_parent"

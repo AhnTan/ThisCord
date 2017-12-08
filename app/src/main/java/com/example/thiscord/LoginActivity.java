@@ -28,14 +28,14 @@ public class LoginActivity extends AppCompatActivity {
     public static DataOutputStream dos;
     public static OutputStream os;
 
-    private Button SetButton;
+    private EditText IPText;
     private EditText IDText;
     private EditText PWDText;
     private Button LoginButton;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private String ip ="223.194.159.58";
+    private String ip ="223.194.153.57";
     //private String ip = "10.0.2.2";   // 안드로이드 에뮬레이터에서는 localhost가 아니라 10.0.2.2로 접근!!
 
     private int port =30000;
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         IDText = (EditText)findViewById(R.id.username);
         PWDText = (EditText)findViewById(R.id.password);
         LoginButton = (Button)findViewById(R.id.loginbutton);
-        SetButton = (Button)findViewById(R.id.settingButton);
+        IPText = (EditText)findViewById(R.id.ipAddress);
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,15 +66,11 @@ public class LoginActivity extends AppCompatActivity {
                 // SharedPreference를 통해 아이디를 저장(다른 곳에서도 쓰기 위하여)
 
                 login_pwd = PWDText.getText().toString();
+                ip = IPText.getText().toString();
                 connectServer();
             }
         });
-        SetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
     }
 
     public void connectServer(){
