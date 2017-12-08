@@ -40,6 +40,13 @@
             android:text="전송"
             android:layout_weight="1"/>
 
+        <Button
+            android:id="@+id/invite_btn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="초대"
+            android:layout_weight="1"/>
+
     </LinearLayout>
 
 </LinearLayout>

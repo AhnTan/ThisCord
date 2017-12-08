@@ -19,12 +19,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/room_add_fab"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_alarm_add_black_24dp"
         fab:fab_colorNormal="@color/fabPrimary"
         fab:fab_colorPressed="@color/fabPressed"
         fab:fab_colorRipple="@color/fabRipple"/>
-    
+
+
+    <com.melnykov.fab.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/refresh_room_fab"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_cached_black_24dp"
+        fab:fab_colorNormal="@color/colorAccent"
+        fab:fab_colorPressed="@color/fabPressed"
+        fab:fab_colorRipple="@color/fabRipple"/>
 
 </FrameLayout>
