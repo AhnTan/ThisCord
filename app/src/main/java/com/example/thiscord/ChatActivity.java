@@ -3,7 +3,6 @@ package com.example.thiscord;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,10 +22,13 @@ public class ChatActivity extends AppCompatActivity {
     private Button send_btn;
     private Button invite_btn;
     private String user_id;
+    private String now_room_name;
     private String nowingChat;
     private String[] gmsg; // 받은 데이터 split으로 잘라서 넣어두는곳
 
 
+
+    private Intent intent;
     Socket socket;
     //private String ip = "10.0.2.2";   // 안드로이드 에뮬레이터에서는 localhost가 아니라 10.0.2.2로 접근!!
     //private int port =30000;
@@ -62,6 +64,10 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+
+        intent = getIntent();
+        now_room_name = intent.getStringExtra("roomname");
+
         input_chattext = (EditText)findViewById(R.id.input_chat);
         nowingChat = input_chattext.getText().toString();
         send_btn = (Button)findViewById(R.id.input_chat_send);
@@ -73,30 +79,15 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        // 사용자 초대
         invite_btn = (Button)findViewById(R.id.invite_btn);
         invite_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    System.out.println("챗룸클릭버튼1 : ");
-                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                    StrictMode.setThreadPolicy(policy);
-                    Send_Msg(user_id + " " +
-
-                            "invite"); // 아이디랑를 보낸다
-                    System.out.println("챗룸클릭버튼2 : " );
-                    String msg = dis.readUTF();
-                    System.out.println("챗룸클릭버튼-서버에서 옴 : " + msg);
-                    gmsg = msg.split(" ");
-
-                    control_Msg(gmsg[0]);
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                    Log.e("client","connectServer() Error");
-                    return;
-                }
-
+                Intent intent = new Intent(getApplicationContext(), Invite_Room_Activity.class);
+                System.out.println("인텐트 전 : " + now_room_name);
+                intent.putExtra("room_name", now_room_name);
+                startActivity(intent);
 
             }
         });

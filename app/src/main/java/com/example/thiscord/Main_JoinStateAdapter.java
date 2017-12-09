@@ -35,6 +35,7 @@ public class Main_JoinStateAdapter extends RecyclerView.Adapter<Main_JoinStateAd
         private ImageView userImg;
         private TextView username;
         private TextView userstats;
+        private TextView userid;
 
 
         // 뷰홀더 -> UI(?)부분에 해당되는 것들을 뷰에 미리 붙여서 고정
@@ -44,6 +45,7 @@ public class Main_JoinStateAdapter extends RecyclerView.Adapter<Main_JoinStateAd
             userImg = (ImageView)itemView.findViewById(R.id.user_img);
             username = (TextView)itemView.findViewById(R.id.user_name);
             userstats = (TextView)itemView.findViewById(R.id.user_stat);
+            userid = (TextView)itemView.findViewById(R.id.user_id);
 
             userImg.setOnClickListener(this);
             username.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +104,7 @@ public class Main_JoinStateAdapter extends RecyclerView.Adapter<Main_JoinStateAd
         Glide.with(context.getApplicationContext()).load(arrayList.get(position).getUrl()).into(viewHolder.userImg);
         viewHolder.username.setText(arrayList.get(position).getName());
         viewHolder.userstats.setText(arrayList.get(position).getStats());
-
+        viewHolder.userid.setText(arrayList.get(position).getId());
 
       if(viewHolder.userstats.getText().equals("온라인")){
             //viewHolder.userstats.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));

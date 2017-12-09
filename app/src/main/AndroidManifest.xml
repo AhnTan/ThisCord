@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.thiscord">
-<uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,12 +18,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
         <activity android:name=".UserInfoActivity" />
         <activity android:name=".UserInfoActivity2" />
         <activity android:name=".ChatActivity" />
-        <activity android:name=".Create_Room_Activity"
-            android:theme="@style/Theme.AppCompat.Dialog"></activity>
+        <activity
+            android:name=".Create_Room_Activity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity android:name=".Invite_Room_Activity"
+            android:theme="@style/Theme.AppCompat.Dialog" ></activity>
     </application>
 
 </manifest>
