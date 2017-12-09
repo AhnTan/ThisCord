@@ -53,6 +53,9 @@ public class Main_roomlist_Fragment extends Fragment {
         sharedPreferences = this.getActivity().getSharedPreferences("user_id", Context.MODE_PRIVATE);
         login_user = sharedPreferences.getString("userid", "01012345678");
 
+        // 맨처음 방플래그먼트에 들어올때 서버에 저장되어있는 방목록 가져옴
+        init();
+
         refresh_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,11 +103,19 @@ public class Main_roomlist_Fragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         room_id = "";
-        room_id += data.getStringExtra("Result");
-        // 플로팅 버튼에서 취소버튼이 아닌 확인 버튼을 누르게 되면 방목록을 추가함
-        if(!room_id.equals("cancle")){
-          main_roomlistAdapter.addItem(new RoomContacts("1",room_id));
+        try {
+            room_id += data.getStringExtra("Result");
+            // 플로팅 버튼에서 취소버튼이 아닌 확인 버튼을 누르게 되면 방목록을 추가함
+            if(!room_id.equals("cancle")){
+                main_roomlistAdapter.addItem(new RoomContacts("1",room_id));
+            }
+
         }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+
 
     }
 
@@ -123,6 +134,8 @@ public class Main_roomlist_Fragment extends Fragment {
     private void control_Msg(String str){
         if(str.equals("#getroom")){  // login success
             System.out.println("길이 : " + gmsg.length);
+            // 어댑터 삭제해야될부분 추가
+            removedItem();
             for(int i = 1; i<gmsg.length; i++){
                 main_roomlistAdapter.addItem(new RoomContacts("1",gmsg[i]));
             }
@@ -133,6 +146,36 @@ public class Main_roomlist_Fragment extends Fragment {
         }
         else
             System.out.println("id/pw error!");
+    }
+
+
+    public void init(){
+        try {
+            System.out.println("방쪽 초기화 1 : ");
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            Send_Msg(login_user + " " + "getroom"); // 아이디랑를 보낸다
+            System.out.println("방쪽 초기화 2 : " );
+            String msg = dis.readUTF();
+            System.out.println("방쪽 초기화-서버에서 옴 : " + msg);
+            gmsg = msg.split(" ");
+
+            control_Msg(gmsg[0]);
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Log.e("client","connectServer() Error");
+            return;
+        }
+    }
+
+    public void removedItem(){
+        
+            main_roomlistAdapter.removeItem();
+            //main_joinstateAdapter.notifyDataSetChanged();
+
+
     }
 
 
