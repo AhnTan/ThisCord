@@ -1,0 +1,114 @@
+<LinearLayout
+    android:id="@+id/chat_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:visibility="invisible"
+    android:background="#ff1122"
+    >
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:id="@+id/my_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="left"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/chat_img"
+        android:layout_gravity="left|center"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        />
+
+            <TextView
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center"
+                android:id="@+id/chat_name"
+                android:textColor="#FFE400"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center"
+                android:id="@+id/chat_time"
+                android:layout_marginLeft="5dp"
+                android:textSize="6dp"
+                />
+
+    </LinearLayout>
+
+
+        <!--내 부분 레이아웃-->
+        <LinearLayout
+            android:id="@+id/my_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:id="@+id/chat_time2"
+                android:layout_marginRight="5dp"
+                android:textSize="6dp"/>
+
+            <TextView
+                android:layout_marginRight="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:id="@+id/chat_name2"
+                android:textColor="#FFE400"/>
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/chat_img2"
+                android:layout_gravity="right|center"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+
+                />
+
+        </LinearLayout>
+    </FrameLayout>
+
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="3dp"
+    card_view:cardElevation="2dp"
+    android:layout_margin="4dp">
+
+
+
+        <TextView
+            android:id="@+id/message_text"
+            android:layout_gravity="right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+
+
+
+</android.support.v7.widget.CardView>
+</LinearLayout>

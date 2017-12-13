@@ -25,8 +25,10 @@
         <activity
             android:name=".Create_Room_Activity"
             android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity android:name=".Invite_Room_Activity"
-            android:theme="@style/Theme.AppCompat.Dialog" ></activity>
+        <activity
+            android:name=".Invite_Room_Activity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity android:name=".Chat_Adapter"></activity>
     </application>
 
 </manifest>
