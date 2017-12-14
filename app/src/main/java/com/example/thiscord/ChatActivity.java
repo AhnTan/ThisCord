@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -26,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity{
+
+
+    private static boolean count=true;
 
     private SharedPreferences sharedPreferences;
     private TextView room_name_title;
@@ -36,6 +38,8 @@ public class ChatActivity extends AppCompatActivity{
     private String now_room_name;
     private String nowingChat;
     private String[] gmsg; // 받은 데이터 split으로 잘라서 넣어두는곳
+
+    private String msg3;
 
     private Handler handler;
 
@@ -55,8 +59,11 @@ public class ChatActivity extends AppCompatActivity{
     Socket socket;
     //private String ip = "10.0.2.2";   // 안드로이드 에뮬레이터에서는 localhost가 아니라 10.0.2.2로 접근!!
     //private int port =30000;
-    private Thread thread;
     DataInputStream dis;
+
+    private InputStream chat_is;
+    private DataInputStream chat_dis;
+
     InputStream is;
     DataOutputStream dos;
     OutputStream os;
@@ -71,6 +78,14 @@ public class ChatActivity extends AppCompatActivity{
         this.dos = LoginActivity.dos;
         this.os = LoginActivity.os;
 
+        try {
+
+            chat_is = this.socket.getInputStream();
+            chat_dis = new DataInputStream(chat_is);
+
+        }catch (Exception e){
+
+        }
     }
 
 
@@ -78,6 +93,9 @@ public class ChatActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
+
+
+
         sharedPreferences = getSharedPreferences("user_id", MODE_PRIVATE);
         user_id = sharedPreferences.getString("userid", "0");
         System.out.println("채팅액티비티 : 유저 - " + user_id);
@@ -111,9 +129,11 @@ public class ChatActivity extends AppCompatActivity{
 
         System.out.println("시간 : " + imgDate);
 
+
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         //user_recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(chat_adapter);
+
 
         handler = new Handler(){
             public void handleMessage(Message msg){
@@ -171,6 +191,8 @@ public class ChatActivity extends AppCompatActivity{
             }
         });
 
+        Send_Msg(user_id + " " + "getchat " + now_room_name); // 아이디랑를 보낸다
+        count=true;
         recvThread.start();
     }
 
@@ -190,106 +212,131 @@ public class ChatActivity extends AppCompatActivity{
     }
 
     public void addAdapter(String name, String message, String time, int index){
-        switch (name){
-            case "ahntan" :
-                chat_adapter.addItem(new MessageContact("안형우", message, time, index, R.drawable.user));
-                break;
-            case "shbaek" :
-                chat_adapter.addItem(new MessageContact("백승환", message, time, index, R.drawable.user2));
-                break;
-            case "jsr" :
-                chat_adapter.addItem(new MessageContact("진소린", message, time, index, R.drawable.user3));
-                break;
-            case "sje" :
-                chat_adapter.addItem(new MessageContact("송정은", message, time, index, R.drawable.user4));
-                break;
-            case "hkd" :
-                chat_adapter.addItem(new MessageContact("한경동", message, time, index, R.drawable.user5));
-                break;
-            default:
-                break;
+        if(!message.equals("null")) {
+            switch (name) {
+                case "ahntan":
+                    chat_adapter.addItem(new MessageContact("안형우", message, time, index, R.drawable.user));
+                    recyclerView.scrollToPosition(chat_adapter.getItemCount() - 1);
+                    break;
+                case "shbaek":
+                    chat_adapter.addItem(new MessageContact("백승환", message, time, index, R.drawable.user2));
+                    recyclerView.scrollToPosition(chat_adapter.getItemCount() - 1);
+                    break;
+                case "jsr":
+                    chat_adapter.addItem(new MessageContact("진소린", message, time, index, R.drawable.user3));
+                    recyclerView.scrollToPosition(chat_adapter.getItemCount() - 1);
+                    break;
+                case "sje":
+                    chat_adapter.addItem(new MessageContact("송정은", message, time, index, R.drawable.user4));
+                    recyclerView.scrollToPosition(chat_adapter.getItemCount() - 1);
+                    break;
+                case "hkd":
+                    chat_adapter.addItem(new MessageContact("한경동", message, time, index, R.drawable.user5));
+                    recyclerView.scrollToPosition(chat_adapter.getItemCount() - 1);
+                    break;
+                default:
+                    break;
 
-
+            }
         }
-
     }
 
 
-    class RecvThread extends Thread{
-    @Override
-    public void run() {
-        while (true) {
-            try {
 
-                // 사용자에게 받는 메세지
+    class RecvThread extends Thread{
+        @Override
+        public void run() {
+            try {
+            while (count) {
+
+
+                    // 사용자에게 받는 메세지
             /*
              * byte[] b = new byte[128]; dis.read(b); String msg = new String(b);
              */
-                System.out.println("쓰레드 시작");
-                String msg = dis.readUTF();
-                System.out.println("데이터 받음 자르기시작");
-                msg = msg.trim();
-                String[] msg1 = msg.split("%3");
-                String cmd = msg1[0];
-                if (cmd.equals("#message")) {
-                    System.out.println("첫번째 : " + msg1[0]);
-                    System.out.println("두번째 : " + msg1[1]);
-                    System.out.println("세번째 : " + msg1[2]);
-                    System.out.println("네번째 : " + msg1[3]);
-                    System.out.println("5번째 : " + msg1[4]);
-                    if(msg1[1].equals(user_id)){
+                    System.out.println("쓰레드 시작22");
+                    //String msg = dis.readUTF();
+                    String msg3 = chat_dis.readUTF();
+                    System.out.println("데이터 받음 자르기시작");
+                    msg3 = msg3.trim();
+                    String[] msg1 = msg3.split("%3");
+                    String cmd = msg1[0];
+                    if (cmd.equals("#message")) {
+                        System.out.println("첫번째 : " + msg1[0]);
+                        System.out.println("두번째 : " + msg1[1]);
+                        System.out.println("세번째 : " + msg1[2]);
+                        System.out.println("네번째 : " + msg1[3]);
+                        System.out.println("5번째 : " + msg1[4]);
+                        if(msg1[1].equals(user_id)){
 
-                        Bundle ontimebundle = new Bundle();
-                        ontimebundle.putString("name", msg1[1]);
-                        ontimebundle.putString("message", msg1[4]);
-                        ontimebundle.putString("time", msg1[2]);
-                        ontimebundle.putInt("index", 0);
-                        Message timermsg = new Message();
-                        timermsg.setData(ontimebundle);
-                        handler.sendMessage(timermsg);
+                            Bundle ontimebundle = new Bundle();
+                            ontimebundle.putString("name", msg1[1]);
+                            ontimebundle.putString("message", msg1[4]);
+                            ontimebundle.putString("time", msg1[2]);
+                            ontimebundle.putInt("index", 0);
+                            Message timermsg = new Message();
+                            timermsg.setData(ontimebundle);
+                            handler.sendMessage(timermsg);
 
                       /*  System.out.println("나 어댑터에 들어감 : ");
                         chat_adapter.addItem(new MessageContact(msg1[1], msg1[4], msg1[2], 0));   // 인덱스 0이면 나임*/
-                    }
-                    else{
+                        }
+                        else{
 
-                        Bundle ontimebundle = new Bundle();
-                        ontimebundle.putString("name", msg1[1]);
-                        ontimebundle.putString("message", msg1[4]);
-                        ontimebundle.putString("time", msg1[2]);
-                        ontimebundle.putInt("index", 1);
-                        Message timermsg = new Message();
-                        timermsg.setData(ontimebundle);
-                        handler.sendMessage(timermsg);
+                            Bundle ontimebundle = new Bundle();
+                            ontimebundle.putString("name", msg1[1]);
+                            ontimebundle.putString("message", msg1[4]);
+                            ontimebundle.putString("time", msg1[2]);
+                            ontimebundle.putInt("index", 1);
+                            Message timermsg = new Message();
+                            timermsg.setData(ontimebundle);
+                            handler.sendMessage(timermsg);
 
                         /*System.out.println("타인 어댑터에 들어감 : ");
                         chat_adapter.addItem(new MessageContact(msg1[1], msg1[4], msg1[2], 0));   // 인덱스 0이면 나임
                         */
-                        //user_arrayList.add(new MessageContact(msg1[1], msg1[4], msg1[2], 1));   // 인덱스 1이면 타인임
+                            //user_arrayList.add(new MessageContact(msg1[1], msg1[4], msg1[2], 1));   // 인덱스 1이면 타인임
+                        }
+
                     }
-
+                    else if(cmd.equals("invite")) {
+                        //InviteUser(msg1);
+                    }
+                    //InMessage(msg);
+                    System.out.println(msg3);
+                } }
+                catch (Exception e) {
+                    return;
                 }
-                else if(cmd.equals("invite")) {
-                    //InviteUser(msg1);
-                }
-                //InMessage(msg);
-                System.out.println(msg);
-            } catch (IOException e) {
-                return;
-                /*try {
-                    dos.close();
-                    dis.close();
-                    socket.close();
-                    break;
+                // 바깥 catch문끝
 
-                } catch (Exception ee) {
+            }
 
-                } */// catch문 끝
-            } // 바깥 catch문끝
 
-        }
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        try{
+
+            count=false;
+            dos.writeUTF("ahntan" + " " + "message " + imgDate + " " + now_room_name + "%3" + "null");
+            System.out.println("백버튼 : " + msg3);
+
+        }catch (Exception e){
+
+        }
+
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.e("destory", "파괴됨");
     }
 }

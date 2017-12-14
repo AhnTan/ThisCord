@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -29,9 +30,12 @@ public class Chat_Adapter extends RecyclerView.Adapter<Chat_Adapter.UnknownViewH
     public Chat_Adapter(Context context){
         this.context = context;
         arrayList = new ArrayList<>();
+
     }
 
     public class UnknownViewHolder extends RecyclerView.ViewHolder {
+
+        private ScrollView scrollView;
 
         private LinearLayout chat_layout;
         private LinearLayout my_layout;
@@ -52,6 +56,10 @@ public class Chat_Adapter extends RecyclerView.Adapter<Chat_Adapter.UnknownViewH
         // 뷰홀더 -> UI(?)부분에 해당되는 것들을 뷰에 미리 붙여서 고정
         public UnknownViewHolder(View itemView){
             super(itemView);
+            this.setIsRecyclable(false);
+
+            scrollView = (ScrollView)itemView.findViewById(R.id.scrollview2);
+
 
             chat_layout = (LinearLayout)itemView.findViewById(R.id.chat_layout);
             my_layout = (LinearLayout)itemView.findViewById(R.id.my_layout);
@@ -106,14 +114,17 @@ public class Chat_Adapter extends RecyclerView.Adapter<Chat_Adapter.UnknownViewH
 
     @Override   // 뷰홀더의 뷰에 position에 해당되는 데이터를 넣음 = 데이터 처리하는곳
     public void onBindViewHolder(final Chat_Adapter.UnknownViewHolder viewHolder,final int position){
+        viewHolder.setIsRecyclable(false);
+        //viewHolder.chat_layout.setGravity("right");
 
-        viewHolder.chat_layout.setGravity(Gravity.RIGHT);
-
+        //UnknownViewHolder unknownViewHolder = ((UnknownViewHolder)viewHolder);
+        Log.e("포짘", arrayList.get(position).getUser_name() + " " + arrayList.get(position).getMessage() + " " + arrayList.get(position).getIndex() + " " + position);
         // 내가 보냈을때
         if(arrayList.get(position).getIndex()==0){
             Log.e("포지션>>", "캬캬캬캬" + position);
             Log.e("포지션 인덱스 : ", "뭐지 " + arrayList.get(position).getIndex());
             viewHolder.chat_layout.setVisibility(View.VISIBLE);
+            viewHolder.chat_layout.setGravity(Gravity.RIGHT);
             viewHolder.my_layout2.setVisibility(View.VISIBLE);
             viewHolder.chat_text.setText(arrayList.get(position).getMessage());
             viewHolder.chat_name2.setText(arrayList.get(position).getUser_name());
@@ -125,11 +136,13 @@ public class Chat_Adapter extends RecyclerView.Adapter<Chat_Adapter.UnknownViewH
         else if(arrayList.get(position).getIndex()==1) {
             System.out.print("포지션 찍어봐 : " + " >> " + position);
             viewHolder.chat_layout.setVisibility(View.VISIBLE);
+            viewHolder.chat_layout.setGravity(Gravity.LEFT);
             viewHolder.my_layout.setVisibility(View.VISIBLE);
             viewHolder.chat_text.setText(arrayList.get(position).getMessage());
             viewHolder.chat_name.setText(arrayList.get(position).getUser_name());
             viewHolder.chat_time.setText(arrayList.get(position).getTime());
             Glide.with(context).load(arrayList.get(position).getUrl()).into(viewHolder.chat_img);
+
         }
 
         System.out.print("포지션 찍어봐 : " + arrayList.get(position).toString() + " >> " + position);

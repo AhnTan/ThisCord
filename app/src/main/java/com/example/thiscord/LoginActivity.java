@@ -37,9 +37,9 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     //private String ip ="223.194.159.58";
     //private String ip = "10.0.2.2";   // 안드로이드 에뮬레이터에서는 localhost가 아니라 10.0.2.2로 접근!!
-    private String ip = "223.194.156.104";
+    public static String ip = "223.194.156.104";
 
-    private int port =30000;
+    public static int port =30000;
     private Thread thread;
 
 
@@ -98,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                     System.out.println("트라이는 들어옴");
                     Send_Msg(login_id+" "+login_pwd); // 아이디랑를 보낸다
 
+
                   /*  byte[] b = new byte[1024];
                     dis.read(b);
 
@@ -105,11 +106,12 @@ public class LoginActivity extends AppCompatActivity {
 */
                   //
                     String msg = dis.readUTF();
+                    Log.e("connect", "7");
                     System.out.println(msg);
                     String[] gmsg = msg.split(" ");
-
+                    Log.e("connect", "8");
                     control_Msg(gmsg[0]);
-
+                    Log.e("connect", "9");
                 }catch (Exception e){
                     e.printStackTrace();
                     Log.e("client","connectServer() Error");

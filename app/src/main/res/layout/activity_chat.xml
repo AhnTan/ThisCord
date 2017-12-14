@@ -40,37 +40,28 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:id="@+id/mid_chat"
-        android:layout_below="@id/top_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    >
 
         <android.support.v7.widget.RecyclerView
-           android:layout_below="@id/top_title"
+            android:layout_above="@+id/send_bottom"
+            android:layout_below="@id/top_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/chat_recyclerview">
-
+            android:id="@+id/chat_recyclerview"
+            android:transcriptMode="alwaysScroll">
         </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:layout_weight="2">
 
-   </RelativeLayout>
+
 
     <LinearLayout
+        android:id="@+id/send_bottom"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <Button
             android:layout_width="50dp"
@@ -104,5 +95,5 @@
 
     </LinearLayout>
 
-    </LinearLayout>
+
 </RelativeLayout>

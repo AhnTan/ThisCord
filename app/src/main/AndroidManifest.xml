@@ -21,7 +21,11 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".UserInfoActivity" />
         <activity android:name=".UserInfoActivity2" />
-        <activity android:name=".ChatActivity" />
+        <activity android:name=".ChatActivity"
+           />
+        <!--android:stackFromBottom="true"
+        android:windowSoftInputMode="adjustPan"
+        -->
         <activity
             android:name=".Create_Room_Activity"
             android:theme="@style/Theme.AppCompat.Dialog" />

@@ -121,10 +121,11 @@ public class Main_roomlist_Fragment extends Fragment {
 
 
     public void Send_Msg(String msg){
-        Log.e("send","send success");
+
         try{
             //  dos.write(bb);
             dos.writeUTF(msg);
+            Log.e("send","send success");
         }catch(Exception e){
             e.printStackTrace();
             Log.e("send","send failed");
