@@ -26,6 +26,8 @@ import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity{
 
+    public Sound_recv recev;
+    public Sound_send send;
 
     private static boolean count=true;
 
@@ -34,6 +36,15 @@ public class ChatActivity extends AppCompatActivity{
     private EditText input_chattext;
     private Button send_btn;
     private Button invite_btn;
+
+    private Button mic_on_btn;
+    private Button mic_off_btn;
+    private Button spk_on_btn;
+    private Button spk_off_btn;
+
+
+    private Button call_btn;
+
     private String user_id;
     private String now_room_name;
     private String nowingChat;
@@ -71,6 +82,9 @@ public class ChatActivity extends AppCompatActivity{
     private String login_pwd;
     private String recv_msg; // 받은 메세지
 
+
+
+
     public ChatActivity(){
         this.socket = LoginActivity.socket;
         this.dis = LoginActivity.dis;
@@ -94,7 +108,7 @@ public class ChatActivity extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
 
-
+        System.out.println("유저정보 : " + UserDao.user_ip + " " + UserDao.id + " " + UserDao.name + " " + UserDao.port1 + " " + UserDao.port2 + " ");
 
         sharedPreferences = getSharedPreferences("user_id", MODE_PRIVATE);
         user_id = sharedPreferences.getString("userid", "0");
@@ -191,6 +205,90 @@ public class ChatActivity extends AppCompatActivity{
             }
         });
 
+
+        // 전화 연결 버튼
+        call_btn = (Button)findViewById(R.id.chat_call_btn);
+        call_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                call_btn.setVisibility(View.INVISIBLE);
+                mic_on_btn.setVisibility(View.VISIBLE);
+                spk_on_btn.setVisibility(View.VISIBLE);
+
+                // 전화 연결 쓰레드 시작
+                recev = new Sound_recv();
+                recev.start();
+
+                send = new Sound_send();
+                send.start();
+            }
+        });
+
+
+
+
+
+        // 마이크 on -> off
+        mic_on_btn = (Button)findViewById(R.id.chat_mic_on_btn);
+        mic_on_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mic_on_btn.setVisibility(View.INVISIBLE);
+                mic_off_btn.setVisibility(View.VISIBLE);
+
+                // 마이크 쓰레드 닫는 거 구현
+                send.interrupt();
+            }
+        });
+
+        // 마이크 off -> on
+        mic_off_btn = (Button)findViewById(R.id.chat_mic_off_btn);
+        mic_off_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mic_on_btn.setVisibility(View.VISIBLE);
+                mic_off_btn.setVisibility(View.INVISIBLE);
+
+                // 마이크 연결
+                send = new Sound_send();
+                send.start();
+
+            }
+        });
+
+
+        // 듣기 on -> off
+        spk_on_btn = (Button)findViewById(R.id.chat_spk_on_btn);
+        spk_on_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spk_on_btn.setVisibility(View.INVISIBLE);
+                spk_off_btn.setVisibility(View.VISIBLE);
+
+                recev.rere = false;
+                recev.track.stop();
+                recev.socket.disconnect();
+                recev.socket.close();
+                recev.interrupt();
+            }
+        });
+
+
+        // 듣기 off -> on
+        spk_off_btn = (Button)findViewById(R.id.chat_spk_off_btn);
+        spk_off_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spk_on_btn.setVisibility(View.VISIBLE);
+                spk_off_btn.setVisibility(View.INVISIBLE);
+
+                // 전화 연결 쓰레드 시작
+                recev = new Sound_recv();
+                recev.start();
+            }
+        });
+
+
         Send_Msg(user_id + " " + "getchat " + now_room_name); // 아이디랑를 보낸다
         count=true;
         recvThread.start();
@@ -268,7 +366,6 @@ public class ChatActivity extends AppCompatActivity{
                         System.out.println("네번째 : " + msg1[3]);
                         System.out.println("5번째 : " + msg1[4]);
                         if(msg1[1].equals(user_id)){
-
                             Bundle ontimebundle = new Bundle();
                             ontimebundle.putString("name", msg1[1]);
                             ontimebundle.putString("message", msg1[4]);
@@ -321,10 +418,22 @@ public class ChatActivity extends AppCompatActivity{
         super.onBackPressed();
 
         try{
-
+            // 채팅 닫기
             count=false;
             dos.writeUTF("ahntan" + " " + "message " + imgDate + " " + now_room_name + "%3" + "null");
             System.out.println("백버튼 : " + msg3);
+
+            // 음성 채팅 다 닫기
+            try {
+                recev.rere = false;
+                recev.track.stop();
+                recev.socket.disconnect();
+                recev.socket.close();
+                recev.interrupt();
+                send.interrupt();
+            }catch (Exception e){
+
+            }
 
         }catch (Exception e){
 

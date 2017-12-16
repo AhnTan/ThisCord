@@ -2,6 +2,9 @@ package com.example.thiscord;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -11,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
 
@@ -45,6 +49,8 @@ public class Main_JoinState_Fragment extends Fragment {
     private ArrayList<Contacts> user_arrayList = new ArrayList<>();
 
     ConnectServers connectServers ;
+
+    private String myip;
 
     public Main_JoinState_Fragment() {
         this.socket = LoginActivity.socket;
@@ -106,13 +112,14 @@ public class Main_JoinState_Fragment extends Fragment {
         });
 
         //connectServer();
+        getip();
         addUser();
 
 
     }
 
 
-    public void connectServer(){
+    /*public void connectServer(){
 
         new Thread(){
             @Override
@@ -137,7 +144,7 @@ public class Main_JoinState_Fragment extends Fragment {
                 }
 
         }.start();
-    }
+    }*/
 
     public void Send_Msg(String msg){
         Log.e("send","send success");
@@ -195,6 +202,7 @@ public class Main_JoinState_Fragment extends Fragment {
                 System.out.println("본인 추가 : " + user_arrayList.get(k).getId() + " " + login_user);
                 user_arrayList.get(k).setStats("온라인");
                 main_joinstateAdapter.addItem(new Contacts(user_arrayList.get(k).getUrl(), user_arrayList.get(k).getBackurl(), user_arrayList.get(k).getId(), user_arrayList.get(k).getName(), user_arrayList.get(k).getStats()));
+                //init(user_arrayList.get(k).getId(), user_arrayList.get(k).getName());
             }
         }
 
@@ -208,6 +216,44 @@ public class Main_JoinState_Fragment extends Fragment {
 
     }
 
+    // 유저 ip, port, 이름, id 등을 UserDao에 저장
+   /* public void init(String id, String name){
+        UserDao.id =  id;
+        UserDao.name = name;
+        UserDao.user_ip = myip;
+    }*/
 
+    public void getip(){
+
+        ConnectivityManager manager = (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean wificon = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+        if (wificon == false) {
+            return;  // 연결이 됬는지 확인
+        }
+        WifiManager wifimanager = (WifiManager)getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+        DhcpInfo dhcpInfo = wifimanager.getDhcpInfo();
+        int wIp = dhcpInfo.ipAddress;
+        myip = String.format("%d.%d.%d.%d", (wIp & 0xff), (wIp >> 8 & 0xff), (wIp >> 16 & 0xff), (wIp >> 24 & 0xff));
+        Toast.makeText(getActivity().getApplicationContext(),myip,Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void Serverinit() {
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            Send_Msg(UserDao.name + " " + "ipsend " + UserDao.user_ip + " " + UserDao.port1 + " " + UserDao.port2); // 아이디랑를 보낸다
+            System.out.println("클릭버튼2 : ");
+            String msg = dis.readUTF();
+            System.out.println("클릭버튼-서버에서 옴 : " + msg);
+            gmsg = msg.split(" ");
+
+            control_Msg(gmsg[0]);
+        }
+        catch (Exception e){
+
+        }
+    }
 
 }

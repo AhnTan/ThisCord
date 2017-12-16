@@ -11,32 +11,75 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:background="#0DFFFFDD"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
             android:paddingLeft="7dp">
 
 
-            <Button
-                android:layout_gravity="center_vertical"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/ic_arrow_back_black_24dp"/>
 
         <TextView
+            android:layout_marginLeft="30dp"
             android:layout_gravity="center_vertical"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:paddingLeft="25dp"
             android:text="방이름"
             android:textSize="20dp"
             android:textColor="#F0F0F0"
             android:id="@+id/chat_room_name_title"/>
-        </LinearLayout>
+
+            <Button
+                android:id="@+id/chat_call_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/ic_phone_call"/>
+
+            <Button
+                android:id="@+id/chat_mic_on_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="75dp"
+                android:background="@drawable/ic_micon"
+                android:visibility="invisible"/>
+
+            <Button
+                android:id="@+id/chat_spk_on_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/ic_spkon"
+                android:visibility="invisible"/>
+
+
+
+            <Button
+                android:id="@+id/chat_mic_off_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="75dp"
+                android:background="@drawable/ic_micoff"
+                android:visibility="invisible"/>
+
+            <Button
+                android:id="@+id/chat_spk_off_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/ic_spkoff"
+                android:visibility="invisible"/>
+
+
+        </FrameLayout>
     </LinearLayout>
 
 

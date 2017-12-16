@@ -1,8 +1,11 @@
 package com.example.thiscord;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +20,9 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private final int MY_PERMISSION_REQUEST_STORAGE = 100;
+
     private String login_id;
     private String login_pwd;
 
@@ -37,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     //private String ip ="223.194.159.58";
     //private String ip = "10.0.2.2";   // 안드로이드 에뮬레이터에서는 localhost가 아니라 10.0.2.2로 접근!!
-    public static String ip = "223.194.156.104";
+    public static String ip = "223.194.157.39";
 
     public static int port =30000;
     private Thread thread;
@@ -51,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,12 +81,13 @@ public class LoginActivity extends AppCompatActivity {
                 connectServer();
             }
         });
-      /*  SetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });*/
+        checkPermission(Permi.PERMISSIONS);
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkPermission(String[] permissions){
+        requestPermissions(permissions, MY_PERMISSION_REQUEST_STORAGE);
     }
 
     public void connectServer(){

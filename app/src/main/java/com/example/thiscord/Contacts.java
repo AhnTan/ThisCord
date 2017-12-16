@@ -11,6 +11,8 @@ public class Contacts {
     String name;
     String stats;
 
+
+
     public Contacts(){
 
     }
@@ -21,6 +23,7 @@ public class Contacts {
         this.id = id;
         this.name = name;
         this.stats = stats;
+
     }
 
 
