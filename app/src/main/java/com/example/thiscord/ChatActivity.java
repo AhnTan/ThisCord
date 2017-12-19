@@ -27,8 +27,8 @@ import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity{
 
-    public Sound_recv recev;
-    public Sound_send send;
+    public Recv_Voice recev;
+    public Send_Voice send;
 
     private static boolean count=true;
 
@@ -237,12 +237,12 @@ public class ChatActivity extends AppCompatActivity{
                 spk_on_btn.setVisibility(View.VISIBLE);
 
 
-                recev = new Sound_recv(user_port+now_room_num);
+                recev = new Recv_Voice(user_port+now_room_num);
                 recev.start();
 
 
                 for(int i=0; i<user_arrayList.size(); i++){
-                    send = new Sound_send(user_arrayList.get(i).getIp(), user_arrayList.get(i).getPort()+now_room_num);
+                    send = new Send_Voice(user_arrayList.get(i).getIp(), user_arrayList.get(i).getPort()+now_room_num);
                     send.start();
                 }
 
@@ -276,7 +276,7 @@ public class ChatActivity extends AppCompatActivity{
 
                 // 마이크 연결
                 for(int i=0; i<user_arrayList.size(); i++){
-                    send = new Sound_send(user_arrayList.get(i).getIp(), user_arrayList.get(i).getPort()+now_room_num);
+                    send = new Send_Voice(user_arrayList.get(i).getIp(), user_arrayList.get(i).getPort()+now_room_num);
                     send.start();
                 }
 
@@ -310,7 +310,7 @@ public class ChatActivity extends AppCompatActivity{
                 spk_off_btn.setVisibility(View.INVISIBLE);
 
                 // 전화 연결 쓰레드 시작
-                recev = new Sound_recv(user_port+now_room_num);
+                recev = new Recv_Voice(user_port+now_room_num);
                 recev.start();
             }
         });

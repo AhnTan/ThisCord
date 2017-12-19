@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     //private String ip ="223.194.159.58";
     //private String ip = "10.0.2.2";   // 안드로이드 에뮬레이터에서는 localhost가 아니라 10.0.2.2로 접근!!
-    public static String ip = "223.194.154.32";
+    public static String ip = "223.194.158.37";
 
     public static int port =30000;
     private Thread thread;
