@@ -5,23 +5,23 @@ package com.example.thiscord;
  */
 
 public class RoomContacts {
-    String room_num;
+    int room_num;
     String room_tile;
 
     public RoomContacts(){
 
     }
 
-    public RoomContacts(String room_num, String room_tile){
+    public RoomContacts(int room_num, String room_tile){
         this.room_num = room_num;
         this.room_tile = room_tile;
     }
 
-    public String getRoom_num() {
+    public int getRoom_num() {
         return room_num;
     }
 
-    public void setRoom_num(String room_num) {
+    public void setRoom_num(int room_num) {
         this.room_num = room_num;
     }
 

@@ -1,8 +1,12 @@
 package com.example.thiscord;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -23,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private final int MY_PERMISSION_REQUEST_STORAGE = 100;
 
+    private String myip;
     private String login_id;
     private String login_pwd;
 
@@ -43,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     //private String ip ="223.194.159.58";
     //private String ip = "10.0.2.2";   // 안드로이드 에뮬레이터에서는 localhost가 아니라 10.0.2.2로 접근!!
-    public static String ip = "223.194.157.39";
+    public static String ip = "223.194.154.32";
 
     public static int port =30000;
     private Thread thread;
@@ -69,6 +74,9 @@ public class LoginActivity extends AppCompatActivity {
         IPText.setText(ip);
         LoginButton = (Button)findViewById(R.id.loginbutton);
         //SetButton = (Button)findViewById(R.id.settingButton);
+
+        getip();
+
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                     os = socket.getOutputStream();
                     dos = new DataOutputStream(os);
                     System.out.println("트라이는 들어옴");
-                    Send_Msg(login_id+" "+login_pwd); // 아이디랑를 보낸다
+                    Send_Msg(login_id+" "+login_pwd + " " + myip); // 아이디랑를 보낸다
 
 
                   /*  byte[] b = new byte[1024];
@@ -158,6 +166,23 @@ public class LoginActivity extends AppCompatActivity {
             // 핸들러로 온크리트로 보내서 거기서 toast 띄워야함
             Toast.makeText(getApplicationContext(), "이미 로그인 되있는 사용자 입니다.", Toast.LENGTH_LONG).show();
         }
+    }
+
+
+    public void getip(){
+
+        ConnectivityManager manager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean wificon = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+        if (wificon == false) {
+            return;  // 연결이 됬는지 확인
+        }
+        WifiManager wifimanager = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+        DhcpInfo dhcpInfo = wifimanager.getDhcpInfo();
+        int wIp = dhcpInfo.ipAddress;
+        myip = String.format("%d.%d.%d.%d", (wIp & 0xff), (wIp >> 8 & 0xff), (wIp >> 16 & 0xff), (wIp >> 24 & 0xff));
+        Toast.makeText(getApplicationContext(),myip,Toast.LENGTH_SHORT).show();
+
     }
 
 }

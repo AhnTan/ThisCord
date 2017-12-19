@@ -28,6 +28,7 @@ public class Main_roomlist_Fragment extends Fragment {
 
     private FloatingActionButton refresh_btn;
 
+    private int room_num; // 방 번호
     private String room_id; // 방이름
     private String login_user; // 접속한 유저 아이디
     private String[] gmsg; // 받은 데이터 split으로 잘라서 넣어두는곳
@@ -105,9 +106,11 @@ public class Main_roomlist_Fragment extends Fragment {
         room_id = "";
         try {
             room_id += data.getStringExtra("Result");
+            room_num = data.getIntExtra("num", 0);
             // 플로팅 버튼에서 취소버튼이 아닌 확인 버튼을 누르게 되면 방목록을 추가함
             if(!room_id.equals("cancle")){
-                main_roomlistAdapter.addItem(new RoomContacts("1",room_id));
+                System.out.println("내가 방만든 번호 : " + room_num);
+                main_roomlistAdapter.addItem(new RoomContacts(room_num,room_id));
             }
 
         }
@@ -137,8 +140,10 @@ public class Main_roomlist_Fragment extends Fragment {
             System.out.println("길이 : " + gmsg.length);
             // 어댑터 삭제해야될부분 추가
             removedItem();
-            for(int i = 1; i<gmsg.length; i++){
-                main_roomlistAdapter.addItem(new RoomContacts("1",gmsg[i]));
+            //System.out.println("서버에서 받은 번호 : " + Integer.parseInt(gmsg[2]));
+            //main_roomlistAdapter.addItem(new RoomContacts(Integer.parseInt(gmsg[2]), gmsg[1]));
+            for(int i = 1; i<gmsg.length; i+=2){
+                main_roomlistAdapter.addItem(new RoomContacts(Integer.parseInt(gmsg[i+1]) ,gmsg[i]));
             }
             //main_roomlistAdapter.addItem(new RoomContacts("1",gmsg[1]));
         }

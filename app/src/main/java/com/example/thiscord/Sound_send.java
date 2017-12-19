@@ -29,10 +29,12 @@ public class Sound_send extends Thread {
     private static final int AudioMode = AudioTrack.MODE_STREAM;
     //private int portnumber = 9002;      //소린->나
     private int portnumber = 9001;      //나->소린
-
-
-
     DatagramSocket socket = null;
+
+    public Sound_send(String ip, int port){
+        this.ip = ip;
+        this.portnumber = port;
+    }
 
     @Override
     public void run() {

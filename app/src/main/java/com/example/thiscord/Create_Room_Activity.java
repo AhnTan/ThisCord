@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.Random;
+
 import static com.example.thiscord.LoginActivity.dis;
 import static com.example.thiscord.LoginActivity.dos;
 
@@ -21,6 +23,9 @@ public class Create_Room_Activity extends Activity {
     private EditText create_room_name;
     private Intent resultIntent;
 
+    private Random random = new Random();
+
+    private int room_num ;   // 방번호
     private String room_id; // 방이름
     private String login_user; // 접속한 유저 아이디
     private String[] gmsg; // 받은 데이터 split으로 잘라서 넣어두는곳
@@ -42,6 +47,8 @@ public class Create_Room_Activity extends Activity {
         createbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                room_num = random.nextInt(1000)+1;
                 room_id = create_room_name.getText().toString();
                 connectServer();
             }
@@ -72,7 +79,7 @@ public class Create_Room_Activity extends Activity {
                 //Toast.makeText(getApplicationContext(),"Connect Server",Toast.LENGTH_LONG).show();
                 try {
 
-                    Send_Msg(login_user + " " + "create " + room_id); // 아이디랑를 보낸다
+                    Send_Msg(login_user + " " + "create " + room_id + " " + String.valueOf(room_num)); // 아이디랑를 보낸다
                     System.out.println("방생성클릭버튼2 : " + room_id);
 
                     String msg = dis.readUTF();
@@ -111,6 +118,7 @@ public class Create_Room_Activity extends Activity {
             System.out.println("CREATEActivity login!!!");
 
             resultIntent.putExtra("Result", gmsg[1]);
+            resultIntent.putExtra("num", room_num);
             setResult(RESULT_OK, resultIntent);
             finish();
 

@@ -52,6 +52,7 @@ public class Main_roomlistAdapter extends RecyclerView.Adapter<Main_roomlistAdap
 
             Intent intent2 = new Intent(context, ChatActivity.class);
             //intent2.putExtra("key", "value");
+            intent2.putExtra("roomnum", arrayList.get(position).getRoom_num());
             intent2.putExtra("roomname", arrayList.get(position).getRoom_tile());
             System.out.println("방 이름 : " + arrayList.get(position).getRoom_tile());
             context.startActivity(intent2);

@@ -27,10 +27,10 @@ public class Chat_Adapter extends RecyclerView.Adapter<Chat_Adapter.UnknownViewH
     ArrayList<MessageContact> arrayList;
 
 
+
     public Chat_Adapter(Context context){
         this.context = context;
         arrayList = new ArrayList<>();
-
     }
 
     public class UnknownViewHolder extends RecyclerView.ViewHolder {
@@ -85,6 +85,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<Chat_Adapter.UnknownViewH
         return arrayList.size();
     }
 
+
     public void addItem(MessageContact contacts){
         // 나일때는 오른쪽에 띄워야 하므로
         if(contacts.index==0){
@@ -101,6 +102,9 @@ public class Chat_Adapter extends RecyclerView.Adapter<Chat_Adapter.UnknownViewH
         notifyItemInserted(arrayList.size()-1);
 
     }
+
+
+
 
     @Override //아이템을 위한 뷰를 만들어서 뷰홀더에 넣어서 리턴
     public Chat_Adapter.UnknownViewHolder onCreateViewHolder(ViewGroup parent, int viewType){

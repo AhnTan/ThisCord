@@ -28,9 +28,9 @@ public class Sound_recv extends Thread {
     private int portnumber = 9002;  // 소린->나
 
 
-    public Sound_recv() {
+    public Sound_recv(int user_port) {
 
-
+        this.portnumber = user_port;
         Log.e("recev_create", "good");
         try {
             socket = new DatagramSocket(portnumber);

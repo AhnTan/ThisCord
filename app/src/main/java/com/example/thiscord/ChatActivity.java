@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -31,6 +32,8 @@ public class ChatActivity extends AppCompatActivity{
 
     private static boolean count=true;
 
+
+
     private SharedPreferences sharedPreferences;
     private TextView room_name_title;
     private EditText input_chattext;
@@ -46,6 +49,9 @@ public class ChatActivity extends AppCompatActivity{
     private Button call_btn;
 
     private String user_id;
+    private int user_port;
+
+    private int now_room_num;
     private String now_room_name;
     private String nowingChat;
     private String[] gmsg; // 받은 데이터 split으로 잘라서 넣어두는곳
@@ -60,10 +66,16 @@ public class ChatActivity extends AppCompatActivity{
     private String formatDate;
     private String imgDate="";
 
+    private String name;
+    private String time;
+    private String message;
+    private int index;
+
     private RecvThread recvThread;
     private RecyclerView recyclerView;
 
-    private ArrayList<MessageContact> user_arrayList = new ArrayList<>();
+    private ArrayList<InChatRoomUserList> userList = new ArrayList<>();
+    private ArrayList<InChatRoomUserList> user_arrayList = new ArrayList<>();
     private Chat_Adapter chat_adapter;
 
     private Intent intent;
@@ -123,6 +135,8 @@ public class ChatActivity extends AppCompatActivity{
         chat_adapter = new Chat_Adapter(getApplicationContext());
         recvThread = new RecvThread();
         intent = getIntent();
+        now_room_num = intent.getIntExtra("roomnum", 0);
+        Toast.makeText(getApplicationContext(), "들어온 방번호 : " + now_room_num, Toast.LENGTH_SHORT).show();
         now_room_name = intent.getStringExtra("roomname");
         room_name_title = (TextView)findViewById(R.id.chat_room_name_title);
         room_name_title.setText(now_room_name);
@@ -154,10 +168,10 @@ public class ChatActivity extends AppCompatActivity{
                 Bundle bundle = new Bundle();
                 bundle = msg.getData();
 
-                String name = bundle.getString("name");
-                String message = bundle.getString("message");
-                String time = bundle.getString("time");
-                int index = bundle.getInt("index");
+                name = bundle.getString("name");
+                message = bundle.getString("message");
+                time = bundle.getString("time");
+                index = bundle.getInt("index");
                 System.out.println("출력 : " + name + message + time + index);
 
                 System.out.println("나 어댑터에 들어감 : " + index);
@@ -181,6 +195,10 @@ public class ChatActivity extends AppCompatActivity{
                     //Send_Msg(user_id + " " + "message " + now_room_name + "%3" + input_chattext.getText().toString()); // 아이디랑를 보낸다
 
                     input_chattext.setText("");
+
+                    for(int t=0; t<userList.size(); t++){
+                        System.out.println("여기요 : " + userList.get(t).getId() + " ip : " + userList.get(t).getIp() + " " + userList.get(t).getPort());
+                    }
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -197,6 +215,9 @@ public class ChatActivity extends AppCompatActivity{
         invite_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                for(int t=0; t<user_arrayList.size(); t++){
+                    System.out.println("여기요2 : " + user_arrayList.get(t).getId() + " ip : " + user_arrayList.get(t).getIp() + " " + user_arrayList.get(t).getPort());
+                }
                 Intent intent = new Intent(getApplicationContext(), Invite_Room_Activity.class);
                 System.out.println("인텐트 전 : " + now_room_name);
                 intent.putExtra("room_name", now_room_name);
@@ -215,12 +236,16 @@ public class ChatActivity extends AppCompatActivity{
                 mic_on_btn.setVisibility(View.VISIBLE);
                 spk_on_btn.setVisibility(View.VISIBLE);
 
-                // 전화 연결 쓰레드 시작
-                recev = new Sound_recv();
+
+                recev = new Sound_recv(user_port+now_room_num);
                 recev.start();
 
-                send = new Sound_send();
-                send.start();
+
+                for(int i=0; i<user_arrayList.size(); i++){
+                    send = new Sound_send(user_arrayList.get(i).getIp(), user_arrayList.get(i).getPort()+now_room_num);
+                    send.start();
+                }
+
             }
         });
 
@@ -250,8 +275,10 @@ public class ChatActivity extends AppCompatActivity{
                 mic_off_btn.setVisibility(View.INVISIBLE);
 
                 // 마이크 연결
-                send = new Sound_send();
-                send.start();
+                for(int i=0; i<user_arrayList.size(); i++){
+                    send = new Sound_send(user_arrayList.get(i).getIp(), user_arrayList.get(i).getPort()+now_room_num);
+                    send.start();
+                }
 
             }
         });
@@ -283,7 +310,7 @@ public class ChatActivity extends AppCompatActivity{
                 spk_off_btn.setVisibility(View.INVISIBLE);
 
                 // 전화 연결 쓰레드 시작
-                recev = new Sound_recv();
+                recev = new Sound_recv(user_port+now_room_num);
                 recev.start();
             }
         });
@@ -389,15 +416,53 @@ public class ChatActivity extends AppCompatActivity{
                             timermsg.setData(ontimebundle);
                             handler.sendMessage(timermsg);
 
-                        /*System.out.println("타인 어댑터에 들어감 : ");
-                        chat_adapter.addItem(new MessageContact(msg1[1], msg1[4], msg1[2], 0));   // 인덱스 0이면 나임
-                        */
-                            //user_arrayList.add(new MessageContact(msg1[1], msg1[4], msg1[2], 1));   // 인덱스 1이면 타인임
                         }
 
                     }
                     else if(cmd.equals("invite")) {
                         //InviteUser(msg1);
+                    }
+                    else if(cmd.equals("#userlist")){
+                        for(int i = 1; i<msg1.length; i+=3){
+                            // 사용자 이름, ip, port 추가 해야됨
+                            int count=0;
+                            for(int j=0; j<userList.size(); j++){
+                                if(userList.get(j).getId().equals(msg1[i])){
+                                    count++;
+                                }
+                            }
+
+                            if(count==0) {
+                                userList.add(new InChatRoomUserList(msg1[i], msg1[i + 1], Integer.parseInt(msg1[i + 2])));
+                            }
+                            //main_roomlistAdapter.addItem(new RoomContacts(Integer.parseInt(gmsg[i+1]) ,gmsg[i]));
+                        }
+
+
+                        // 전화 연결 쓰레드 시작
+                        for(int k=0; k<userList.size(); k++){
+                            // 지금 사용자의 port를 찾아서 초기화
+                            if(userList.get(k).getId().equals(user_id)){
+                                user_port = userList.get(k).getPort();
+                            }
+
+                            else if(!userList.get(k).getId().equals(user_id)){
+
+                                int count=0;
+                                for(int m=0; m<user_arrayList.size(); m++){
+                                    if(user_arrayList.get(m).getId().equals(userList.get(k).getId())){
+                                        count++;
+                                    }
+                                }
+
+                                if(count==0) {
+                                    //나를 제외한 나머지 사람들의 정보를 저장해놓은 리스트
+                                    user_arrayList.add(new InChatRoomUserList(userList.get(k).getId(), userList.get(k).getIp(), userList.get(k).getPort()));
+                                }
+
+                            }
+                        }
+
                     }
                     //InMessage(msg);
                     System.out.println(msg3);
